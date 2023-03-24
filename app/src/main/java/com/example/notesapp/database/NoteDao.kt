@@ -11,8 +11,8 @@ interface NoteDao {
     fun getNotesList(): LiveData<List<NoteInfo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(note: NoteInfo)
+    suspend fun insertNote(note: NoteInfo)
 
     @Delete
-    fun deleteNote(note: NoteInfo)
+    suspend fun deleteNote(note: NoteInfo)
 }
