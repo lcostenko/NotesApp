@@ -1,8 +1,9 @@
 package com.example.notesapp.adapters
 
-import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.databinding.NotesItemBinding
 import com.example.notesapp.pojo.NoteInfo
@@ -15,6 +16,8 @@ class NoteAdapter :
             field = value
             notifyDataSetChanged()
         }
+
+    var onNoteClickListener: OnNoteClickListener? = null
 
     class NoteViewHolder(binding: NotesItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -34,10 +37,18 @@ class NoteAdapter :
         return noteList.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = noteList[position]
         holder.tvTitle.text = note.title.toString()
         holder.tvDescription.text = note.description.toString()
-        holder.tvTime.text = note.time.toString()
+        holder.tvTime.text = note.getFormattedTime()
+        holder.itemView.setOnClickListener {
+            onNoteClickListener?.onNoteClick(note)
+        }
+    }
+
+    interface OnNoteClickListener {
+        fun onNoteClick(note: NoteInfo)
     }
 }
